@@ -37,7 +37,7 @@ We can use after-all to do something like this.
 app.get('/dashboard.json', function(req, res) {
   var resp = {};
   var next = afterAll(function() {
-    send(resp);
+    res.end(resp);
   });
 
   db.findCustomers(next(function(err, docs) {
