@@ -6,6 +6,7 @@
   "directories": {
     "test": "test"
   },
+  "repository": "https://github.com/sorribas/after-next.git",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha"
   },
