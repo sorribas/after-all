@@ -2,6 +2,14 @@
 
 Call several asynchronous functions and invoke a callback 'after all' of them are done.
 
+## Installation
+
+You can install it with npm.
+
+```
+npm install after-all
+```
+
 ## Simple example
 
 ```js
