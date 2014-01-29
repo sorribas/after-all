@@ -5,9 +5,10 @@ module.exports = function(afterAllCb) {
   return function next(cb) {
     calls++;
 
-    return function thecallback(err) {
+    return function thecallback() {
+      var args = arguments;
       process.nextTick(function() {
-        cb.apply(null, arguments);
+        cb.apply(null, args);
         if (--calls === 0) afterAllCb();
       });
     }

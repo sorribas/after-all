@@ -53,4 +53,13 @@ describe('after-all', function() {
       d = 8;
     }, 200));
   });
+
+  it('should pass the arguments to the original callbacks', function(done) {
+    var next = afterAll(function() {
+      done();
+    });
+
+    (next(function(a) { a.should.eql(2)}))(2);
+    (next(function(b) { b.should.eql('hi')}))('hi');
+  });
 });
