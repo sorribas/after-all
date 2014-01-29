@@ -1,0 +1,18 @@
+{
+  "name": "after-all",
+  "version": "0.0.1",
+  "description": "Execute several async functions and get a callback when they are all done",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "author": "Eduardo Sorribas <eduardo@sorribas.org> (http://sorribas.org/)",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "1.17.1",
+    "should": "3.1.2"
+  }
+}
