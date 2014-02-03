@@ -62,4 +62,12 @@ describe('after-all', function() {
     (next(function(a) { a.should.eql(2)}))(2);
     (next(function(b) { b.should.eql('hi')}))('hi');
   });
+
+  it('should work if the callback is not passed', function(done) {
+    var next = afterAll(function() {
+      done();
+    });
+
+    setTimeout(next(), 300);
+  })
 });

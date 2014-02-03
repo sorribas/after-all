@@ -8,7 +8,7 @@ module.exports = function(afterAllCb) {
     return function thecallback() {
       var args = arguments;
       process.nextTick(function() {
-        cb.apply(null, args);
+        if (cb) cb.apply(null, args);
         if (--calls === 0) afterAllCb();
       });
     }
