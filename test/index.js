@@ -69,5 +69,18 @@ describe('after-all', function() {
     });
 
     setTimeout(next(), 300);
-  })
+  });
+
+  it('should throw an error if the "next" function is called after the final callback is called', function(done) {
+    var next = afterAll(function() {});
+    next()();
+
+    process.nextTick(function() {
+      try {
+        next();
+      } catch(e) {
+        done();
+      }
+    });
+  });
 });
