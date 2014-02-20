@@ -65,4 +65,6 @@ app.get('/dashboard.json', function(req, res) {
   }));
 });
 ```
+## License
 
+MIT
