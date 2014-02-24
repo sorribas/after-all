@@ -83,4 +83,9 @@ describe('after-all', function() {
       }
     });
   });
+
+  it('should call the callback if the "next" function is never called in the same tick', function(done) {
+    var next = afterAll(done);
+    process.nextTick(function() {});
+  });
 });

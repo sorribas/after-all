@@ -5,6 +5,13 @@ module.exports = function(afterAllCb) {
   var calls = 0;
   var done = false;
 
+  process.nextTick(function() {
+    if (calls === 0) {
+      done = true;
+      afterAllCb();
+    }
+  });
+
   return function next(cb) {
     if (done) throw new Error(errorMessage);
     calls++;
@@ -18,6 +25,6 @@ module.exports = function(afterAllCb) {
           afterAllCb();
         }
       });
-    }
-  }
+    };
+  };
 };
