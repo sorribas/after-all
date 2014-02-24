@@ -1,3 +1,5 @@
+var util = require('util');
+
 module.exports = function(afterAllCb) {
   
   var errorMessage ='"next" function called after the final callback.'+
@@ -16,7 +18,11 @@ module.exports = function(afterAllCb) {
     if (done) throw new Error(errorMessage);
     calls++;
 
-    return function thecallback() {
+    return function thecallback(err) {
+      if (util.isError(err)) {
+        done = true;
+        return afterAllCb(err);
+      }
       var args = arguments;
       process.nextTick(function() {
         if (cb) cb.apply(null, args);

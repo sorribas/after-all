@@ -88,4 +88,20 @@ describe('after-all', function() {
     var next = afterAll(done);
     process.nextTick(function() {});
   });
+
+  it('should catch errors and pass it to the final callback', function(done) {
+    var next = afterAll(function(err) {
+      err.should.be.ok;
+      done();
+    });
+
+    var n1 = next();
+    var n2 = next();
+
+    setTimeout(function() {
+      n1(new Error('Some error'));
+    }, 100);
+    setTimeout(n2, 10000);
+
+  });
 });
