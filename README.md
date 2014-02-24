@@ -67,6 +67,13 @@ app.get('/dashboard.json', function(req, res) {
   }));
 });
 ```
+
+## Error handling
+
+If an error is passed as the first parameter to the `next` callback, the 
+final callback will be called immediately and the error will be passed to
+it as the first argument.
+
 ## License
 
 MIT
