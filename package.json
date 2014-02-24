@@ -1,6 +1,6 @@
 {
   "name": "after-all",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Execute several async functions and get a callback when they are all done",
   "main": "index.js",
   "directories": {
