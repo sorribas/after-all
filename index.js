@@ -19,6 +19,7 @@ module.exports = function(afterAllCb) {
     calls++;
 
     return function thecallback(err) {
+      if (done) return;
       if (util.isError(err)) {
         done = true;
         return afterAllCb(err);

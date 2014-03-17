@@ -104,4 +104,22 @@ describe('after-all', function() {
     setTimeout(n2, 10000);
 
   });
+
+
+  it('should only call the final callback once in the case of an error', function() {
+    var count = 0;
+    var next = afterAll(function() {
+      (++count === 1).should.be.ok;
+    });
+
+    var n1 = next();
+    var n2 = next();
+    var n3 = next();
+
+    n1();
+    n2(new Error('Oops!'));
+    n3(new Error('Oops!'));
+
+  });
+
 });
