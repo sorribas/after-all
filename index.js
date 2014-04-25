@@ -1,6 +1,8 @@
 var util = require('util');
 
 module.exports = function(afterAllCb) {
+
+  afterAllCb = afterAllCb || function() {};
   
   var errorMessage ='"next" function called after the final callback.'+
     ' Make sure all the calls to "next" are on the same tick';

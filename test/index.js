@@ -106,10 +106,11 @@ describe('after-all', function() {
   });
 
 
-  it('should only call the final callback once in the case of an error', function() {
+  it('should only call the final callback once in the case of an error', function(done) {
     var count = 0;
     var next = afterAll(function() {
       (++count === 1).should.be.ok;
+      done();
     });
 
     var n1 = next();
@@ -119,6 +120,21 @@ describe('after-all', function() {
     n1();
     n2(new Error('Oops!'));
     n3(new Error('Oops!'));
+
+  });
+
+  it('should not require the final callback', function(done) {
+    var next = afterAll();
+
+    var n1 = next();
+    var n2 = next();
+    var n3 = next();
+
+    n1();
+    n2();
+    n3();
+
+    setTimeout(done, 250);
 
   });
 
