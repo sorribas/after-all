@@ -16,7 +16,7 @@ npm install after-all
 
 ```js
 var afterAll = require('after-all');
-next = afterAll(done);
+var next = afterAll(done);
 
 setTimeout(next(function() {
   console.log('Step two.');
