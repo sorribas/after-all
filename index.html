@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <title>After-all by sorribas</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>After-all</h1>
+        <h2>Call several asynchronous functions and invoke a callback &#39;after all&#39; of them are done.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/sorribas/after-all/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/sorribas/after-all/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/sorribas/after-all" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a name="after-all" class="anchor" href="#after-all"><span class="octicon octicon-link"></span></a>after-all</h1>
+
+<p><a href="http://travis-ci.org/sorribas/after-all"><img src="https://secure.travis-ci.org/sorribas/after-all.png" alt="build status"></a></p>
+
+<p>Call several asynchronous functions and invoke a callback 'after all' of them are done.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>You can install it with npm.</p>
+
+<pre><code>npm install after-all
+</code></pre>
+
+<h2>
+<a name="simple-example" class="anchor" href="#simple-example"><span class="octicon octicon-link"></span></a>Simple example</h2>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">afterAll</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'after-all'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">afterAll</span><span class="p">(</span><span class="nx">done</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Step two.'</span><span class="p">);</span>
+<span class="p">}),</span> <span class="mi">500</span><span class="p">);</span>
+
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Step one.'</span><span class="p">);</span>
+<span class="p">}),</span> <span class="mi">100</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">done</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Yay we're done!"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="more-complex-example-and-sample-use-case" class="anchor" href="#more-complex-example-and-sample-use-case"><span class="octicon octicon-link"></span></a>More complex example and sample use case</h2>
+
+<p>Imagine you have to create a dashboard page which has a list of customers
+a list products, the total amount of sales and some more information.</p>
+
+<p>Now, the queries to get this information are independent, yet we tend to wait for
+one to be finished to start the next. We may be able to increase the performance
+by starting some of this queries at the same time and waiting for the callbacks.</p>
+
+<p>We can use after-all to do something like this.</p>
+
+<div class="highlight highlight-js"><pre>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/dashboard.json'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">resp</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">afterAll</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">resp</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">db</span><span class="p">.</span><span class="nx">findCustomers</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">docs</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resp</span><span class="p">.</span><span class="nx">customers</span> <span class="o">=</span> <span class="nx">docs</span><span class="p">;</span>
+  <span class="p">}));</span>
+
+  <span class="nx">db</span><span class="p">.</span><span class="nx">findProducts</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">docs</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resp</span><span class="p">.</span><span class="nx">products</span> <span class="o">=</span> <span class="nx">docs</span><span class="p">;</span>
+  <span class="p">}));</span>
+
+  <span class="nx">db</span><span class="p">.</span><span class="nx">findTodaySalesAmount</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resp</span><span class="p">.</span><span class="nx">todaySales</span> <span class="o">=</span> <span class="nx">amount</span><span class="p">;</span>
+  <span class="p">}));</span>
+
+  <span class="nx">db</span><span class="p">.</span><span class="nx">findLastMonthSalesAmount</span><span class="p">(</span><span class="nx">next</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resp</span><span class="p">.</span><span class="nx">lastMonthSales</span> <span class="o">=</span> <span class="nx">amount</span><span class="p">;</span>
+  <span class="p">}));</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="error-handling" class="anchor" href="#error-handling"><span class="octicon octicon-link"></span></a>Error handling</h2>
+
+<p>If an error is passed as the first parameter to the <code>next</code> callback, the 
+final callback will be called immediately and the error will be passed to
+it as the first argument.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>MIT</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
