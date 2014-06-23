@@ -54,9 +54,13 @@ app.get('/dashboard.json', function(req, res) {
     resp.customers = docs;
   }));
 
-  db.findProducts(next(function(err, docs) {
-    resp.products = docs;
-  }));
+  var cb = next(); // wrapping the callback is optional
+  db.findProducts(function(err, docs) {
+    db.findProductsSales(function() {
+      resp.products = docs;
+      cb();
+    });
+  });
 
   db.findTodaySalesAmount(next(function(err, amount) {
     resp.todaySales = amount;
@@ -67,6 +71,12 @@ app.get('/dashboard.json', function(req, res) {
   }));
 });
 ```
+
+As you can see, passing a callback to the `next` function is optional and it can be
+useful to not pass any when you are doing more than one sequetial async operations as
+in the example above.
+
+Also notice that all the calls to `next` must be done on the same tick.
 
 ## Error handling
 
