@@ -56,8 +56,9 @@ app.get('/dashboard.json', function(req, res) {
 
   var cb = next(); // wrapping the callback is optional
   db.findProducts(function(err, docs) {
-    db.findProductsSales(function() {
+    db.findProductsSales(function(sales) {
       resp.products = docs;
+      resp.productsSales = sales;
       cb();
     });
   });
