@@ -1,4 +1,6 @@
-var util = require('util');
+var isError = function(e) {
+  return Object.prototype.toString.call(e) === '[object Error]' || e instanceof Error;
+};
 
 module.exports = function(afterAllCb) {
 
@@ -22,7 +24,7 @@ module.exports = function(afterAllCb) {
 
     return function thecallback(err) {
       if (done) return;
-      if (util.isError(err)) {
+      if (isError(err)) {
         done = true;
         return afterAllCb(err);
       }
