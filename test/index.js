@@ -1,141 +1,145 @@
+var test = require('tape');
 var afterAll = require('../index');
-require('should');
 
-describe('after-all', function() {
-  it('should call the callback "after all" the functions are done', function(done) {
-    var a,b,c,d;
-    var next = afterAll(function() {
-      a.should.eql(2);
-      b.should.eql(4);
-      c.should.eql(6);
-      d.should.eql(8);
-      done();
-    });
-
-    setTimeout(next(function() {
-      a = 2;
-    }, 400));
-
-    setTimeout(next(function() {
-      b = 4;
-    }, 100));
-
-    setTimeout(next(function() {
-      c = 6;
-    }, 300));
-
-    setTimeout(next(function() {
-      d = 8;
-    }, 200));
+test('should call the callback "after all" the functions are done', function(t) {
+  var a,b,c,d;
+  var next = afterAll(function() {
+    t.equal(a, 2);
+    t.equal(b, 4);
+    t.equal(c, 6);
+    t.equal(d, 8);
+    t.end();
   });
 
-  it('should work with non-asynchronous functions', function(done) {
-    var a,b,c,d;
-    var next = afterAll(function() {
-      a.should.eql(2);
-      b.should.eql(4);
-      c.should.eql(6);
-      d.should.eql(8);
-      done();
-    });
+  setTimeout(next(function() {
+    a = 2;
+  }, 400));
 
-    (next(function() { a = 2; }))();
+  setTimeout(next(function() {
+    b = 4;
+  }, 100));
 
-    setTimeout(next(function() {
-      b = 4;
-    }, 100));
+  setTimeout(next(function() {
+    c = 6;
+  }, 300));
 
-    setTimeout(next(function() {
-      c = 6;
-    }, 300));
+  setTimeout(next(function() {
+    d = 8;
+  }, 200));
+});
 
-    setTimeout(next(function() {
-      d = 8;
-    }, 200));
+test('should work with non-asynchronous functions', function(t) {
+  var a,b,c,d;
+  var next = afterAll(function() {
+    t.equal(a, 2);
+    t.equal(b, 4);
+    t.equal(c, 6);
+    t.equal(d, 8);
+    t.end();
   });
 
-  it('should pass the arguments to the original callbacks', function(done) {
-    var next = afterAll(function() {
-      done();
-    });
+  (next(function() { a = 2; }))();
 
-    (next(function(a) { a.should.eql(2)}))(2);
-    (next(function(b) { b.should.eql('hi')}))('hi');
+  setTimeout(next(function() {
+    b = 4;
+  }, 100));
+
+  setTimeout(next(function() {
+    c = 6;
+  }, 300));
+
+  setTimeout(next(function() {
+    d = 8;
+  }, 200));
+});
+
+test('should pass the arguments to the original callbacks', function(t) {
+  var next = afterAll(function() {
+    t.end();
   });
 
-  it('should work if the callback is not passed', function(done) {
-    var next = afterAll(function() {
-      done();
-    });
+  (next(function(a) { t.equal(a, 2)}))(2);
+  (next(function(b) { t.equal(b, 'hi')}))('hi');
+});
 
-    setTimeout(next(), 300);
+test('should work if the callback is not passed', function(t) {
+  var next = afterAll(function() {
+    t.end();
   });
 
-  it('should throw an error if the "next" function is called after the final callback is called', function(done) {
-    var next = afterAll(function() {});
-    next()();
+  setTimeout(next(), 300);
+});
 
-    process.nextTick(function() {
-      try {
-        next();
-      } catch(e) {
-        done();
-      }
-    });
+test('should throw an error if the "next" function is called after the final callback is called', function(t) {
+  var next = afterAll(function() {});
+  next()();
+
+  process.nextTick(function() {
+    try {
+      next();
+    } catch(e) {
+      t.end();
+    }
+  });
+});
+
+test('should call the callback if the "next" function is never called in the same tick', function(t) {
+  var next = afterAll(t.end.bind(t));
+  process.nextTick(function() {});
+});
+
+test('should catch errors and pass it to the final callback', function(t) {
+  var next = afterAll(function(err) {
+    t.ok(err);
+    t.end();
   });
 
-  it('should call the callback if the "next" function is never called in the same tick', function(done) {
-    var next = afterAll(done);
-    process.nextTick(function() {});
+  var n1 = next();
+  var n2 = next();
+
+  setTimeout(function() {
+    n1(new Error('Some error'));
+  }, 100);
+  setTimeout(n2, 10000);
+
+});
+
+
+test('should only call the final callback once in the case of an error', function(t) {
+  var count = 0;
+  var next = afterAll(function() {
+    t.ok(++count === 1);
+    t.end();
   });
 
-  it('should catch errors and pass it to the final callback', function(done) {
-    var next = afterAll(function(err) {
-      err.should.be.ok;
-      done();
-    });
+  var n1 = next();
+  var n2 = next();
+  var n3 = next();
 
-    var n1 = next();
-    var n2 = next();
+  n1();
+  n2(new Error('Oops!'));
+  n3(new Error('Oops!'));
 
-    setTimeout(function() {
-      n1(new Error('Some error'));
-    }, 100);
-    setTimeout(n2, 10000);
+});
 
-  });
+test('should not require the final callback', function(t) {
+  var next = afterAll();
 
+  var n1 = next();
+  var n2 = next();
+  var n3 = next();
 
-  it('should only call the final callback once in the case of an error', function(done) {
-    var count = 0;
-    var next = afterAll(function() {
-      (++count === 1).should.be.ok;
-      done();
-    });
+  n1();
+  n2();
+  n3();
 
-    var n1 = next();
-    var n2 = next();
-    var n3 = next();
+  setTimeout(function() {
+    t.end();
+  }, 250);
 
-    n1();
-    n2(new Error('Oops!'));
-    n3(new Error('Oops!'));
+});
 
-  });
-
-  it('should not require the final callback', function(done) {
-    var next = afterAll();
-
-    var n1 = next();
-    var n2 = next();
-    var n3 = next();
-
-    n1();
-    n2();
-    n3();
-
-    setTimeout(done, 250);
-
-  });
-
+test('end', function(t) {
+  t.end();
+  process.exit();
 });

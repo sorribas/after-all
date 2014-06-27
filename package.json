@@ -8,12 +8,11 @@
   },
   "repository": "https://github.com/sorribas/after-next.git",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "tape test"
   },
   "author": "Eduardo Sorribas <eduardo@sorribas.org> (http://sorribas.org/)",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "1.17.1",
-    "should": "3.1.2"
+    "tape": "^2.13.3"
   }
 }
