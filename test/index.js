@@ -100,10 +100,8 @@ test('should catch errors and pass it to the final callback', function(t) {
   setTimeout(function() {
     n1(new Error('Some error'));
   }, 100);
-  setTimeout(n2, 10000);
-
+  setTimeout(n2, 500);
 });
-
 
 test('should only call the final callback once in the case of an error', function(t) {
   var count = 0;
@@ -158,9 +156,4 @@ test('should not require the final callback', function(t) {
     t.end();
   }, 250);
 
-});
-
-test('end', function(t) {
-  t.end();
-  process.exit();
 });
