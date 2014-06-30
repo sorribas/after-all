@@ -122,6 +122,27 @@ test('should only call the final callback once in the case of an error', functio
 
 });
 
+test('should call all the callbacks even in case of error', function(t) {
+  var count = 0;
+  var next = afterAll(function() {
+    t.equal(count, 0);
+  });
+
+  var countup = function() {
+    if (++count === 3) t.end();
+  };
+
+  var n1 = next(countup);
+  var n2 = next(countup);
+  var n3 = next(countup);
+
+  n1();
+  n2(new Error('Oops!'));
+  n3(new Error('Oops!'));
+
+});
+
+
 test('should not require the final callback', function(t) {
   var next = afterAll();
 

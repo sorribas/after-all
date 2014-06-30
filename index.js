@@ -1,10 +1,12 @@
+var once = require('once');
+
 var isError = function(e) {
   return Object.prototype.toString.call(e) === '[object Error]' || e instanceof Error;
 };
 
 module.exports = function(afterAllCb) {
 
-  afterAllCb = afterAllCb || function() {};
+  afterAllCb = once(afterAllCb || function() {});
   
   var errorMessage ='"next" function called after the final callback.'+
     ' Make sure all the calls to "next" are on the same tick';
@@ -23,12 +25,8 @@ module.exports = function(afterAllCb) {
     calls++;
 
     return function thecallback(err) {
-      if (done) return;
-      if (isError(err)) {
-        done = true;
-        return afterAllCb(err);
-      }
       var args = arguments;
+      if (isError(err)) afterAllCb(err);
       process.nextTick(function() {
         if (cb) cb.apply(null, args);
         if (--calls === 0) {
