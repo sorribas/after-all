@@ -12,6 +12,7 @@ module.exports = function(afterAllCb) {
     ' Make sure all the calls to "next" are on the same tick';
   var calls = 0;
   var done = false;
+  var finalError = null;
 
   process.nextTick(function() {
     if (calls === 0) {
@@ -26,12 +27,12 @@ module.exports = function(afterAllCb) {
 
     return function thecallback(err) {
       var args = arguments;
-      if (isError(err)) afterAllCb(err);
+      if (isError(err) && !finalError) finalError = err;
       process.nextTick(function() {
         if (cb) cb.apply(null, args);
         if (--calls === 0) {
           done = true;
-          afterAllCb();
+          afterAllCb(finalError);
         }
       });
     };

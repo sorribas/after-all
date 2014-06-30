@@ -105,8 +105,9 @@ test('should catch errors and pass it to the final callback', function(t) {
 
 test('should only call the final callback once in the case of an error', function(t) {
   var count = 0;
-  var next = afterAll(function() {
-    t.ok(++count === 1);
+  var next = afterAll(function(err) {
+    t.equal(err.message, 'Oops!');
+    t.equal(++count, 1);
     t.end();
   });
 
@@ -116,18 +117,19 @@ test('should only call the final callback once in the case of an error', functio
 
   n1();
   n2(new Error('Oops!'));
-  n3(new Error('Oops!'));
+  n3(new Error('Oops! 2'));
 
 });
 
 test('should call all the callbacks even in case of error', function(t) {
   var count = 0;
   var next = afterAll(function() {
-    t.equal(count, 0);
+    t.equal(count, 3);
+    t.end();
   });
-
+  
   var countup = function() {
-    if (++count === 3) t.end();
+    count++;
   };
 
   var n1 = next(countup);
