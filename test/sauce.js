@@ -13,7 +13,6 @@ var capabilities = [
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '25' },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '4'  },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '3'  },
-  { browserName: 'internet explorer' , platform: 'Windows 8' , version: '11' },
   { browserName: 'internet explorer' , platform: 'Windows 8' , version: '10' },
   { browserName: 'internet explorer' , platform: 'Windows 7' , version: '9'  },
   { browserName: 'internet explorer' , platform: 'Windows 7' , version: '8'  },
