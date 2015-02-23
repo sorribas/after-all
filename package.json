@@ -8,7 +8,8 @@
   },
   "repository": "https://github.com/sorribas/after-all.git",
   "scripts": {
-    "test": "tape test"
+    "test": "tape test",
+    "sauce": "node test/sauce.js"
   },
   "author": "Eduardo Sorribas <eduardo@sorribas.org> (http://sorribas.org/)",
   "license": "MIT",

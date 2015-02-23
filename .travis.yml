@@ -3,4 +3,6 @@ node_js:
   - "0.10"
   - "0.8"
 before_install:
-  - npm install -g npm@~1.4.6
+  - npm install -g npm@~1.4.23
+
+script: "npm test && npm run sauce"
