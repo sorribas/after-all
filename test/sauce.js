@@ -8,8 +8,6 @@ var capabilities = [
   { browserName: 'chrome'            , platform: 'Windows 8' , version: '40' },
   { browserName: 'chrome'            , platform: 'Windows 8' , version: '35' },
   { browserName: 'chrome'            , platform: 'Windows 8' , version: '30' },
-  { browserName: 'chrome'            , platform: 'Windows 8' , version: '25' },
-  { browserName: 'chrome'            , platform: 'Windows 8' , version: '20' },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '35' },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '30' },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '25' },
