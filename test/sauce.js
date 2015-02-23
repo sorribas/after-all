@@ -15,14 +15,14 @@ var capabilities = [
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '25' },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '4'  },
   { browserName: 'firefox'           , platform: 'Windows 8' , version: '3'  },
+  { browserName: 'safari'            , platform: 'Windows 7' , version: '5'  },
+  { browserName: 'opera'             , platform: 'Windows 7' , version: ''   },
+  { browserName: 'android'           , platform: 'Linux'     , version: '4.0'},
   { browserName: 'internet explorer' , platform: 'Windows 8' , version: '10' },
   { browserName: 'internet explorer' , platform: 'Windows 7' , version: '9'  },
   { browserName: 'internet explorer' , platform: 'Windows 7' , version: '8'  },
   { browserName: 'internet explorer' , platform: 'Windows XP', version: '7'  },
-  { browserName: 'internet explorer' , platform: 'Windows XP', version: '6'  },
-  { browserName: 'safari'            , platform: 'Windows 7' , version: '5'  },
-  { browserName: 'opera'             , platform: 'Windows 7' , version: ''   },
-  { browserName: 'android'           , platform: 'Linux'     , version: '4.0'}
+  { browserName: 'internet explorer' , platform: 'Windows XP', version: '6'  }
 ];
 
 if (!user || !key) {
