@@ -14,6 +14,7 @@
   "author": "Eduardo Sorribas <eduardo@sorribas.org> (http://sorribas.org/)",
   "license": "MIT",
   "devDependencies": {
+    "brtapsauce": "^0.4.0",
     "tape": "^2.13.3"
   },
   "dependencies": {
