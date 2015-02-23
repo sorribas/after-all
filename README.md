@@ -2,6 +2,8 @@
 
 [![build status](https://secure.travis-ci.org/sorribas/after-all.png)](http://travis-ci.org/sorribas/after-all)
 
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/after-all.svg)](https://saucelabs.com/u/after-all)
+
 Call several asynchronous functions and invoke a callback 'after all' of them are done.
 
 ## Installation
