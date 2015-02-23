@@ -3,6 +3,8 @@ var key = process.env.SAUCE_KEY;
 var path = require('path');
 var brtapsauce = require('brtapsauce');
 
+if (process.version.match(/v0\.10\..*/g)) process.exit(); // make travis only run this once.
+
   // list of browsers & versions that you want to test
 var capabilities = [
   { browserName: 'chrome'            , platform: 'Windows 8' , version: '40' },
