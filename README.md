@@ -18,19 +18,20 @@ npm install after-all
 
 ```js
 var afterAll = require('after-all');
-var next = afterAll(done);
 
-setTimeout(next(function() {
-  console.log('Step two.');
-}), 500);
+var next = afterAll(function(err) {
+	if (err) throw err; // one of the asynchronous calls had an error
+	console.log('Yay! Everything is done');
+});
 
-setTimeout(next(function() {
-  console.log('Step one.');
-}), 100);
+// The above inner function will only be called when all of these asynchronous calls are done
 
-function done() {
-  console.log("Yay we're done!");
-}
+someAsynchronousCall1({foo:'bar'}, next());
+someAsynchronousCall2({val:2}, next(function(err, res) {
+	// If you want to do something with the returned value, you can pass a function
+	if (err) return;
+	console.log('This was returned: '+res);
+}));
 ```
 
 ## More complex example and sample use case
