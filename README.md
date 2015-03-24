@@ -20,7 +20,7 @@ npm install after-all
 var afterAll = require('after-all');
 
 var next = afterAll(function(err) {
-	if (err) throw err; // one of the asynchronous calls had an error
+	if (err) return console.log(err); // one of the asynchronous calls had an error
 	console.log('Yay! Everything is done');
 });
 
